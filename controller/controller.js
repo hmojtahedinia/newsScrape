@@ -1,3 +1,5 @@
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
 /* eslint-disable no-shadow */
 /* eslint-disable eqeqeq */
 /* eslint-disable linebreak-style */
@@ -5,16 +7,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
-const express = require('express');
+var express = require('express');
 
-const router = express.Router();
-const path = require('path');
+var router = express.Router();
+var path = require('path');
 
-const request = require('request');
-const cheerio = require('cheerio');
+var request = require('request');
+var cheerio = require('cheerio');
 
-const comment = require('../models/Comment.js');
-const Article = require('../models/Article.js');
+var comment = require('../models/Comment.js');
+var Article = require('../models/Article.js');
 
 router.get('/', (req, res) => {
   res.redirect('/articles');
@@ -22,11 +24,11 @@ router.get('/', (req, res) => {
 
 router.get('/scrape', (req, res) => {
   request('https://www.medicalnewstoday.com/', (error, response, html) => {
-    const $ = cheerio.load(html);
-    const titleArray = [];
+    var $ = cheerio.load(html);
+    var titleArray = [];
 
     $('.featured').each((i, element) => {
-      const result = {};
+      var result = {};
 
       result.title = $(this).find('a').attr('title');
       result.link = $(this).find('a').attr('href');
@@ -38,7 +40,7 @@ router.get('/scrape', (req, res) => {
 
           Article.count({ title: result.title }, (err, test) => {
             if (test === 0) {
-              const entry = new Article(result);
+              var entry = new Article(result);
 
               entry.save((err, doc) => {
                 if (err) {
@@ -65,7 +67,7 @@ router.get('/articles', (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      const artcl = { article: doc };
+      var artcl = { article: doc };
       res.render('index', artcl);
     }
   });
